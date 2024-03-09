@@ -1,0 +1,17 @@
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  # creat persistance volume for static files of 1G capacity and allows multiple podsto read and write simultaneously.
+  # django storage files will be stored in /data/staticfiles directory.
+  name: staticfiles-pv
+  labels:
+    type: local
+    app: django-staticfiles
+spec:
+  storageClassName: manual
+  capacity:
+    storage: 1Gi
+  accessModes:
+    - ReadWriteMany
+  hostPath:
+    path: "/data/static"

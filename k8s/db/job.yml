@@ -1,0 +1,34 @@
+apiVersion: batch/v1
+kind: Job
+metadata:
+  # deploy the job named "django-db-migrations" in the same namespace as django-app
+  name: django-db-migrations
+  namespace: django-app
+spec:
+  # keep running the container for 100 sec after job is completed.
+  # the job runs container with migration command on bootstrap.
+  ttlSecondsAfterFinished: 100
+  activeDeadlineSeconds: 60
+
+  template:
+    spec:
+      volumes:
+        - name: postgres-db-storage
+          persistentVolumeClaim:
+            claimName: postgres-pvc
+      containers:
+        - name: migration-container
+          image: archtaqi/django-kubernetes:1.0
+          command: ["python", "manage.py", "migrate"]
+          imagePullPolicy: Always
+          envFrom:
+            - configMapRef:
+                name: app-cm
+          ports:
+            - containerPort: 8000
+          volumeMounts:
+            - mountPath: "data/db"
+              name: postgres-db-storage
+      restartPolicy: OnFailure
+  # if jobs fails, retry for 15 times.
+  backoffLimit: 15

@@ -1,0 +1,15 @@
+apiVersion: v1
+kind: Service
+metadata:
+  # svc listen on port 8000and forward traffic to pods with label `app: django-application`
+  name: app-service
+  namespace: django-app
+  labels:
+    app: app-svc
+spec:
+  ports:
+    # we don't need NodePort as we will be exposing the svc using nginx load balancer.
+    - port: 8000
+      targetPort: 8000
+  selector:
+    app: django-application

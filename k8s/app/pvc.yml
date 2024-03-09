@@ -1,0 +1,14 @@
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  # created a persistent volume claim for static files of 1G capacity in django-app namespace and allows multiple pods to read and write simultaneously.
+  name: staticfiles-pvc
+  namespace: django-app
+spec:
+  storageClassName: manual
+  accessModes:
+    - ReadWriteMany
+  resources:
+    requests:
+      storage: 1Gi
+  volumeName: staticfiles-pv

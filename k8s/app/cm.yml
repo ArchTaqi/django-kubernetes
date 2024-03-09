@@ -1,0 +1,14 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  # define configuration in django-app namespace.
+  # the config files can be used by other pods and resouces within django-app namespace.
+  name: app-cm
+  namespace: django-app
+data:
+  DB_HOST: "postgres"
+  DB_USERNAME: "django_user"
+  DB_PASSWORD: "django_secert_password!@#"
+  DB_NAME: "django_app"
+  DB_PORT: "5432"
+  STATIC_ROOT: "/data/static"
